@@ -1,16 +1,26 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Text, View } from 'react-native';
+import HomeScreen from './src/screens/HomeScreen';
 
-
-function App(): React.JSX.Element {
-  fetch("https://pokeapi.co/api/v2/pokemon")
-    .then(response => response.json())
-    .then(data => console.log(data));
-  return (
-    <View>
-      <Text>Hola22</Text>
-    </View>
-  );
+type RootStack = {
+  Home: undefined,
 }
+
+const Stack = createNativeStackNavigator<RootStack>();
+
+const App = (): React.JSX.Element => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Welcome to Home Screen' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
 export default App;
