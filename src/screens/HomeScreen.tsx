@@ -1,28 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native'
-import axios from 'axios';
-import { InfoPokemonResponse } from '../entities/InfoPokemonResponse';
-import { pokemonMapper } from '../mapper/PokemonMapper';
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { PokemonLocal } from '../entities/PokemonLocal';
-import { PokemonesResponse, PokemonResponse } from '../entities/DataResponse';
+import React, { useEffect, useState } from 'react';
+import { fetchPokemones } from '../conexion/fetchPokemones';
 export default function HomeScreen() {
-    async function getPokemones(): Promise<PokemonLocal[]> {
-        const response = await axios.get<PokemonesResponse>("https://pokeapi.co/api/v2/pokemon?offset=0&limit=50");
-        const pokemonesResponse = response.data;
-        const infoPokemones: InfoPokemonResponse[] = await Promise.all(
-            pokemonesResponse.results.map(async (item: PokemonResponse) => {
-                const infoPokemon = await axios.get<InfoPokemonResponse>(`https://pokeapi.co/api/v2/pokemon/${item.name}/`);
-                return infoPokemon.data;
-            })
-        );
-        const pokemonesMapped: PokemonLocal[] = infoPokemones.map((item: InfoPokemonResponse) => pokemonMapper(item));
-        console.log(pokemonesMapped);
-        return pokemonesMapped;
-    }
+    const [pokemones, setPokemones] = useState<PokemonLocal[]>([]);
+    useEffect(() => {
+        const loadPokemones = async () => {
+            const data = await fetchPokemones();
+            setPokemones(data);
+            console.log(data);
+        };
+        loadPokemones();
+    }, []);
 
-    getPokemones();
     return (
         <View>
-            <Text>HomeScreen</Text>
+            <FlatList
+                data={pokemones}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    <Text>{item.name}</Text>
+                )}
+            />
         </View>
     )
 }
