@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function HomeScreen() {
     async function getPokemones() {
-        const response = await axios.get("https://pokeapi.co/api/v2/pokemon");
+        const response = await axios.get("https://pokeapi.co/api/v2/pokemon?offset=0&limit=50");
         const pokemones = response.data;
         console.log(pokemones);
     }
