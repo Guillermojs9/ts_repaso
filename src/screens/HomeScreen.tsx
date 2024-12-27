@@ -8,7 +8,6 @@ export default function HomeScreen() {
         const loadPokemones = async () => {
             const data = await fetchPokemones();
             setPokemones(data);
-            console.log(data);
         };
         loadPokemones();
     }, []);
