@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { PokemonLocal } from '../entities/PokemonLocal';
 import React, { useEffect, useState } from 'react';
 import { fetchPokemones } from '../conexion/fetchPokemones';
+import { CardPokemon } from '../components/CardPokemon';
 export default function HomeScreen() {
     const [pokemones, setPokemones] = useState<PokemonLocal[]>([]);
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function HomeScreen() {
                 data={pokemones}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <Text>{item.name}</Text>
+                    <CardPokemon pokemon={item} />
                 )}
             />
         </View>
